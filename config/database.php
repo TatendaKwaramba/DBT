@@ -1,5 +1,7 @@
 <?php
 
+$dbopts = parse_url(getenv('DATABASE_URL') ?: 'postgres://user:pass@host:5432/dbname');
+
 return [
 
     /*
@@ -26,7 +28,7 @@ return [
     |
     */
 
-    'default' => 'mysql',
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -66,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver'   => 'pgsql',
-            'host'     => 'localhost',
-            'port'     => 5432,
-            'database' => 'database',
-            'username' => 'root',
-            'password' => '',
+            'host' => env('DB_HOST', $dbopts["host"]),
+            'port' => env('DB_PORT', $dbopts["port"]),
+            'database' => env('DB_DATABASE', ltrim($dbopts["path"],'/')),
+            'username' => env('DB_USERNAME', $dbopts["user"]),
+            'password' => env('DB_PASSWORD', $dbopts["pass"]),
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
